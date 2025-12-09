@@ -1,25 +1,26 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyPatrolling : MonoBehaviour
 {
-    [SerializeField] private Enemy _enemy;
+    [SerializeField] private UnitRotation _unitRotation;
     [SerializeField] private Transform _targetPoint;
     [SerializeField] private float _speed;
 
     private Vector3 _position;
-    private int _index;
+    private int _direction;
 
     private void Start()
     {
         _position = GetPosition();
     }
 
-    private void Update()
+    public void Move()
     {
         if (transform.position == _position)
         {
             _position = GetPosition();
-            ChangeFlip();
+            transform.rotation = _unitRotation.GetRotation(_direction);
         }
 
         transform.position = Vector2.MoveTowards(transform.position, _position, _speed * Time.deltaTime);
@@ -27,21 +28,13 @@ public class EnemyPatrolling : MonoBehaviour
 
     private Vector3 GetPosition()
     {
-        _index++;
+        _direction++;
 
-        if (_index == _targetPoint.childCount)
-            _index = 0;
+        if (_direction == _targetPoint.childCount)
+            _direction = 0;
 
-        Vector3 posiiton = _targetPoint.GetChild(_index).position;
+        Vector3 posiiton = _targetPoint.GetChild(_direction).position;
 
         return posiiton;
-    }
-
-    private void ChangeFlip()
-    {
-        if (_enemy.SpriteRenderer.flipX)
-            _enemy.SpriteRenderer.flipX = false;
-        else
-            _enemy.SpriteRenderer.flipX = true;
     }
 }

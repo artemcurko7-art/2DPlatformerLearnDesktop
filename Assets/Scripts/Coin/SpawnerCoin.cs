@@ -1,13 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class SpawnerCoin : MonoBehaviour
 {
     [SerializeField] private Coin _coin;
+    [SerializeField] private Transform _spawnerPoint;
     [SerializeField] private float _repeatRate;
-    [SerializeField] private int _capacityPool;
     [SerializeField] private int _maxSizePool;
     
     private ObjectPool<Coin> _pool;
@@ -19,7 +18,6 @@ public class SpawnerCoin : MonoBehaviour
             actionOnGet: (coin) => ActionOnGet(coin),
             actionOnRelease: (coin) => ActionOnRelease(coin),
             actionOnDestroy: (coin) => Destroy(coin.gameObject),
-            defaultCapacity: _capacityPool,
             maxSize: _maxSizePool);
     }
 
@@ -30,17 +28,33 @@ public class SpawnerCoin : MonoBehaviour
 
     private void ActionOnGet(Coin coin)
     {
-
+        coin.transform.position = GetRandomPosition();
+        coin.gameObject.SetActive(true);
+        coin.Collided += OnRelease;
     }
 
     private void ActionOnRelease(Coin coin)
     {
+        coin.gameObject.SetActive(false);
+    }
 
+    private void OnRelease(Coin coin)
+    {
+        _pool.Release(coin);
+        coin.Collided -= OnRelease;
     }
 
     private void GetCoin()
     {
         _pool.Get();
+    }
+
+    private Vector2 GetRandomPosition()
+    {
+        int indexPosition = Random.Range(0, _spawnerPoint.childCount);
+        Vector2 position = _spawnerPoint.GetChild(indexPosition).position;
+
+        return position;
     }
 
     private IEnumerator SpawnCoin()
@@ -49,7 +63,9 @@ public class SpawnerCoin : MonoBehaviour
         {
             yield return new WaitForSeconds(_repeatRate);
 
-            
+            GetCoin();
+
+            yield return null;
         }
     }
 }
