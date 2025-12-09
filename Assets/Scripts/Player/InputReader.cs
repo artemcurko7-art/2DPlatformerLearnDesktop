@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class InputReader : MonoBehaviour
 {
+    private const KeyCode ButtonD = KeyCode.D;
+    private const KeyCode ButtonA = KeyCode.A;
+    private const KeyCode ButtonSpace = KeyCode.Space;
+
     public event Action<float> Movable;
     public event Action Jumper;
     public event Action Idled;
@@ -13,14 +17,14 @@ public class InputReader : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(ButtonD))
             Movable?.Invoke(Input.GetAxis(_horizontal));
-        else if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(ButtonA))
             Movable?.Invoke(Input.GetAxis(_horizontal));
         else if (Input.GetAxis(_horizontal) == 0)
             Idled?.Invoke();    
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(ButtonSpace))
             Jumper?.Invoke();
     }
 }

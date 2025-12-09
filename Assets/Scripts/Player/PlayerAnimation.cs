@@ -3,9 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimation : MonoBehaviour
 {
-    [SerializeField] private InputReader _inputReader;
-
-    private readonly string _run = "IsRun";
+    private const string IsRun = nameof(IsRun);
 
     private Animator _animator;
 
@@ -14,21 +12,9 @@ public class PlayerAnimation : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    private void OnEnable()
-    {
-        _inputReader.Idled += OnIdledAnimation;
-        _inputReader.Movable += OnMovableAnimation;
-    }
+    public void OnIdledAnimation() =>
+        _animator.SetBool(IsRun, false);
 
-    private void OnDisable()
-    {
-        _inputReader.Idled -= OnIdledAnimation;
-        _inputReader.Movable -= OnMovableAnimation;
-    }
-
-    private void OnIdledAnimation() =>
-        _animator.SetBool(_run, false);
-
-    private void OnMovableAnimation(float direction) =>
-        _animator.SetBool(_run, true);
+    public void OnMovableAnimation() =>
+        _animator.SetBool(IsRun, true);
 }

@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private PlayerJump _playerJump;
+    [SerializeField] private PlayerAnimation _playerAnimation;
     [SerializeField] private UnitRotation _unitRotation;
     [SerializeField] private InputReader _inputReader;
 
@@ -25,18 +26,21 @@ public class Player : MonoBehaviour
     {
         _inputReader.Movable += OnMove;
         _inputReader.Jumper += OnJump;
+        _inputReader.Idled += _playerAnimation.OnIdledAnimation;
     }
 
     private void OnDisable()
     {
         _inputReader.Movable -= OnMove;
         _inputReader.Jumper -= OnJump;
+        _inputReader.Idled -= _playerAnimation.OnIdledAnimation;
     }
 
     private void OnMove(float direction)
     {
         _playerMovement.Move(_rigidbody2D, direction);
         transform.rotation = _unitRotation.GetRotation(direction);
+        _playerAnimation.OnMovableAnimation();
     }
 
     private void OnJump() =>

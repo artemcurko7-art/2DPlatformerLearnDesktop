@@ -15,7 +15,12 @@ public class EnemyPatrolling : MonoBehaviour
         _position = GetPosition();
     }
 
-    public void Move()
+    private void Update()
+    {
+        Move();
+    }
+
+    private void Move()
     {
         if (transform.position == _position)
         {
