@@ -17,12 +17,12 @@ public class InputReader : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(ButtonD))
-            Movable?.Invoke(Input.GetAxis(_horizontal));
-        else if (Input.GetKey(ButtonA))
-            Movable?.Invoke(Input.GetAxis(_horizontal));
-        else if (Input.GetAxis(_horizontal) == 0)
-            Idled?.Invoke();    
+        var horizontalX = Input.GetAxis(_horizontal);
+
+        if (horizontalX == 0)
+            Idled?.Invoke();
+        else
+            Movable?.Invoke(horizontalX);
 
         if (Input.GetKeyDown(ButtonSpace))
             Jumper?.Invoke();

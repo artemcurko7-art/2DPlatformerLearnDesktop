@@ -1,8 +1,4 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
 public class Player : MonoBehaviour
@@ -12,14 +8,14 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerAnimation _playerAnimation;
     [SerializeField] private UnitRotation _unitRotation;
     [SerializeField] private InputReader _inputReader;
+    [SerializeField] private int _health;
+    [SerializeField] private int _damage;
 
     private Rigidbody2D _rigidbody2D;
-    private SpriteRenderer _spriteRenderer;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable()
@@ -45,4 +41,14 @@ public class Player : MonoBehaviour
 
     private void OnJump() =>
         _playerJump.Jump(_rigidbody2D);
+
+    public void Attack()
+    {
+
+    }
+
+    public void TakeDamage()
+    {
+
+    }
 }
